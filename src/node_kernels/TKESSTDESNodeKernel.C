@@ -58,6 +58,7 @@ TKESSTDESNodeKernel::setup(Realm& realm)
   cDESkw_ = realm.get_turb_model_constant(TM_cDESkw);
 }
 
+KOKKOS_FUNCTION
 void TKESSTDESNodeKernel::execute(
   NodeKernelTraits::LhsType& lhs,
   NodeKernelTraits::RhsType& rhs,

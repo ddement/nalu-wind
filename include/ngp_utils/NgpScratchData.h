@@ -47,7 +47,7 @@ struct ElemSimdData
     const ElemDataRequestsGPU& dataReq)
     : simdScrView(team, ndim, nodesPerElem, dataReq)
   {
-#ifdef KOKKOS_ENABLE_CUDA
+#if defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP)
     scrView[0] = &simdScrView;
 #else
     for (int si=0; si < simdLen; ++si) {
@@ -73,7 +73,7 @@ struct ElemSimdData
    *
    *  When executing on GPUs we dont
    */
-#ifdef KOKKOS_ENABLE_CUDA
+#if defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP)
   ScratchViews<DoubleType, TeamHandleType, ShmemType>* scrView[1];
 #else
   std::unique_ptr<ScratchViews<double, TeamHandleType, ShmemType>> scrView[simdLen];
@@ -105,7 +105,7 @@ struct FaceElemSimdData
     : simdFaceView(team, ndim, nodesPerFace, faceDataReqs),
       simdElemView(team, ndim, nodesPerElem, elemDataReqs)
   {
-#ifdef KOKKOS_ENABLE_CUDA
+#if defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP)
     scrFaceView[0] = &simdFaceView;
     scrElemView[0] = &simdElemView;
 #else
@@ -136,7 +136,7 @@ struct FaceElemSimdData
    *
    *  When executing on GPUs we dont
    */
-#ifdef KOKKOS_ENABLE_CUDA
+#if defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP)
   ScratchViews<DoubleType, TeamHandleType, ShmemType>* scrFaceView[1];
   ScratchViews<DoubleType, TeamHandleType, ShmemType>* scrElemView[1];
 #else

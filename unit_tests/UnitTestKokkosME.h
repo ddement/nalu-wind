@@ -96,14 +96,14 @@ public:
 
   template<typename LambdaFunction>
   void execute(LambdaFunction
-#ifndef KOKKOS_ENABLE_CUDA
+#if !(defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP))
                  func
 #endif
      )
   {
     ThrowAssertMsg(partVec_.size()==1, "KokkosMEViews unit-test assumes partVec_.size==1");
 
-#ifndef KOKKOS_ENABLE_CUDA
+#if !(defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP))
     helperObjs_->assembleElemSolverAlg->run_algorithm(bulk_, func);
 #endif
   }

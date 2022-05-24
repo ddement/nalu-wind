@@ -12,6 +12,7 @@
 #ifndef TimeIntegrator_h
 #define TimeIntegrator_h
 
+#include <Realm.h>
 #include <Enums.h>
 #include <vector>
 #include <string>
@@ -22,7 +23,6 @@ namespace YAML { class Node; }
 namespace sierra{
 namespace nalu{
 
-class Realm;
 class Simulation;
 class ExtOverset;
 

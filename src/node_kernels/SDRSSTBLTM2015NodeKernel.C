@@ -74,6 +74,7 @@ SDRSSTBLTM2015NodeKernel::setup(Realm& realm)
   xcoordEndFixedTurb_ = realm.solutionOptions_->xcoordEndFixedTurb_;
 }
 
+KOKKOS_FUNCTION
 void
 SDRSSTBLTM2015NodeKernel::execute(
   NodeKernelTraits::LhsType& lhs,

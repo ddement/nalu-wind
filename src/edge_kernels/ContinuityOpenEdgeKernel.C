@@ -78,6 +78,7 @@ void ContinuityOpenEdgeKernel<BcAlgTraits>::setup(const TimeIntegrator& timeInte
 }
 
 template <typename BcAlgTraits>
+KOKKOS_FUNCTION
 void
 ContinuityOpenEdgeKernel<BcAlgTraits>::execute(
   SharedMemView<DoubleType**, DeviceShmem>& lhs,

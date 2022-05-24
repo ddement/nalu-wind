@@ -17,7 +17,7 @@
 #include <Kokkos_Macros.hpp>
 #include <Kokkos_Core.hpp>
 
-#ifdef KOKKOS_ENABLE_CUDA
+#if defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP)
 #define NALU_ALIGNED alignas(sizeof(double))
 #elif defined(NALU_USE_POWER9_ALIGNMENT)
 #define NALU_ALIGNED alignas(16)
@@ -33,7 +33,7 @@
 #define POINTER_RESTRICT
 #endif
 
-#ifdef KOKKOS_ENABLE_CUDA
+#if defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP)
 #define NONCONST_LAMBDA [&]__host__
 #else
 #define NONCONST_LAMBDA [&]
@@ -44,6 +44,8 @@ namespace nalu {
 
 #ifdef KOKKOS_ENABLE_CUDA
 typedef Kokkos::CudaSpace    MemSpace;
+#elif defined(KOKKOS_ENABLE_HIP)
+typedef Kokkos::Experimental::HIPSpace     MemSpace;
 #elif defined(KOKKOS_HAVE_OPENMP)
 typedef Kokkos::OpenMP       MemSpace;
 #else
@@ -114,7 +116,7 @@ SharedMemView<T***,TeamShmemType> get_shmem_view_3D(const TEAMHANDLETYPE& team, 
   return Kokkos::subview(SharedMemView<T****,TeamShmemType>(team.team_scratch(1), team.team_size(), len1, len2, len3), team.team_rank(), Kokkos::ALL(), Kokkos::ALL(), Kokkos::ALL());
 }
 
-#ifndef KOKKOS_ENABLE_CUDA
+#if !(defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP))
 template<typename T, typename TEAMHANDLETYPE, typename TeamShmemType=HostShmem>
 KOKKOS_FUNCTION
 SharedMemView<T****,TeamShmemType> get_shmem_view_4D(const TEAMHANDLETYPE& team, size_t len1, size_t len2, size_t len3, size_t len4)

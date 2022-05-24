@@ -38,6 +38,7 @@ void MomentumABLForceNodeKernel::setup(Realm& realm)
   ablSrc_ = realm.ablForcingAlg_->velocity_source_interpolator();
 }
 
+KOKKOS_FUNCTION
 void MomentumABLForceNodeKernel::execute(
   NodeKernelTraits::LhsType&,
   NodeKernelTraits::RhsType& rhs,

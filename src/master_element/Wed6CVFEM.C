@@ -97,6 +97,7 @@ WedSCV::WedSCV()
 //--------------------------------------------------------------------------
 //-------- ipNodeMap -------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 const int *
 WedSCV::ipNodeMap(
   int /*ordinal*/) const
@@ -105,6 +106,7 @@ WedSCV::ipNodeMap(
   return &ipNodeMap_[0];
 }
 
+KOKKOS_FUNCTION
 void WedSCV::determinant(
   SharedMemView<DoubleType**, DeviceShmem>& coordel,
   SharedMemView<DoubleType*, DeviceShmem>& volume)
@@ -215,6 +217,7 @@ void WedSCV::determinant(
 //--------------------------------------------------------------------------
 //-------- grad_op ---------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void WedSCV::grad_op(
   SharedMemView<DoubleType**, DeviceShmem>& coords,
   SharedMemView<DoubleType***, DeviceShmem>& gradop,
@@ -227,6 +230,7 @@ void WedSCV::grad_op(
 //--------------------------------------------------------------------------
 //-------- shifted_grad_op -------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void WedSCV::shifted_grad_op(
   SharedMemView<DoubleType**, DeviceShmem>& coords,
   SharedMemView<DoubleType***, DeviceShmem>& gradop,
@@ -254,13 +258,15 @@ void WedSCV::determinant(
       volume, error, &lerr );
 }
 
-KOKKOS_FUNCTION void
+KOKKOS_FUNCTION 
+void
 WedSCV::shape_fcn(SharedMemView<DoubleType**, DeviceShmem> &shpfc)
 {
   wed_shape_fcn(numIntPoints_, &intgLoc_[0], shpfc);
 }
 
-KOKKOS_FUNCTION void
+KOKKOS_FUNCTION 
+void
 WedSCV::shifted_shape_fcn(
   SharedMemView<DoubleType**, DeviceShmem> &shpfc)
 {
@@ -321,6 +327,7 @@ void WedSCV::Mij(
   generic_Mij_3d<AlgTraitsWed6>(numIntPoints_, deriv, coords, metric);
 }
 //-------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void WedSCV::Mij(
   SharedMemView<DoubleType**, DeviceShmem>& coords,
   SharedMemView<DoubleType***, DeviceShmem>& metric,
@@ -341,7 +348,7 @@ WedSCS::WedSCS()
   MasterElement::nodesPerElement_ = nodesPerElement_;
   MasterElement::numIntPoints_ = numIntPoints_;
 
-#ifndef KOKKOS_ENABLE_CUDA
+#if !(defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP))
   const double nodeLocations[6][3] =
   {
       {0.0,0.0, -1.0}, {+1.0, 0.0, -1.0}, {0.0, +1.0, -1.0},
@@ -365,6 +372,7 @@ WedSCS::WedSCS()
 //--------------------------------------------------------------------------
 //-------- ipNodeMap -------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 const int *
 WedSCS::ipNodeMap(
   int ordinal) const
@@ -376,6 +384,7 @@ WedSCS::ipNodeMap(
 //--------------------------------------------------------------------------
 //-------- side_node_ordinals ----------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 const int *
 WedSCS::side_node_ordinals ( int ordinal) const
 {
@@ -383,6 +392,7 @@ WedSCS::side_node_ordinals ( int ordinal) const
   return &sideNodeOrdinals_[sideOffset_[ordinal]];
 }
 
+KOKKOS_FUNCTION
 void WedSCS::determinant(
   SharedMemView<DoubleType**, DeviceShmem>& coordel,
   SharedMemView<DoubleType**, DeviceShmem>& areav)
@@ -509,6 +519,7 @@ void WedSCS::determinant(
   *error = 0;
 }
 
+KOKKOS_FUNCTION
 void WedSCS::grad_op(
   SharedMemView<DoubleType**, DeviceShmem>& coords,
   SharedMemView<DoubleType***, DeviceShmem>& gradop,
@@ -519,6 +530,7 @@ void WedSCS::grad_op(
   generic_grad_op<AlgTraitsWed6>(deriv, coords, gradop);
 }
 
+KOKKOS_FUNCTION
 void WedSCS::shifted_grad_op(
   SharedMemView<DoubleType**, DeviceShmem>& coords,
   SharedMemView<DoubleType***, DeviceShmem>& gradop,
@@ -677,6 +689,7 @@ WedSCS::face_grad_op(
 //--------------------------------------------------------------------------
 //-------- face_grad_op ----------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void WedSCS::face_grad_op(
   int face_ordinal,
   SharedMemView<DoubleType**, DeviceShmem>& coords,
@@ -694,6 +707,7 @@ void WedSCS::face_grad_op(
 //--------------------------------------------------------------------------
 //-------- shifted_face_grad_op --------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void WedSCS::shifted_face_grad_op(
   int face_ordinal,
   SharedMemView<DoubleType**, DeviceShmem>& coords,
@@ -749,6 +763,7 @@ WedSCS::shifted_face_grad_op(
 }
 
 
+KOKKOS_FUNCTION
 void WedSCS::gij(
   SharedMemView<DoubleType**, DeviceShmem>& coords,
   SharedMemView<DoubleType***, DeviceShmem>& gupper,
@@ -787,6 +802,7 @@ void WedSCS::Mij(
   generic_Mij_3d<AlgTraitsWed6>(numIntPoints_, deriv, coords, metric);
 }
 //-------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void WedSCS::Mij(
   SharedMemView<DoubleType**, DeviceShmem>& coords,
   SharedMemView<DoubleType***, DeviceShmem>& metric,
@@ -799,6 +815,7 @@ void WedSCS::Mij(
 //--------------------------------------------------------------------------
 //-------- adjacentNodes ---------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 const int *
 WedSCS::adjacentNodes()
 {
@@ -809,6 +826,7 @@ WedSCS::adjacentNodes()
 //--------------------------------------------------------------------------
 //-------- scsIpEdgeOrd ----------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 const int *
 WedSCS::scsIpEdgeOrd()
 {
@@ -818,6 +836,7 @@ WedSCS::scsIpEdgeOrd()
 //--------------------------------------------------------------------------
 //-------- opposingNodes --------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 int
 WedSCS::opposingNodes(
   const int ordinal,
@@ -830,6 +849,7 @@ WedSCS::opposingNodes(
 //--------------------------------------------------------------------------
 //-------- opposingFace --------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 int
 WedSCS::opposingFace(
   const int ordinal,

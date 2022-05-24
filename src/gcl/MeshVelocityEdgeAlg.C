@@ -61,7 +61,11 @@ MeshVelocityEdgeAlg<AlgTraits>::MeshVelocityEdgeAlg(
   elemData_.add_gathered_nodal_field(meshDispN_, AlgTraits::nDim_);
 
   elemData_.add_master_element_call(SCS_AREAV, CURRENT_COORDINATES);
-  meSCS_->general_shape_fcn(19, isoParCoords_, isoCoordsShapeFcn_);
+  meSCS_->general_shape_fcn(19, isoParCoords_, isoCoordsShapeFcnHostView_.data());
+  Kokkos::deep_copy(isoCoordsShapeFcnDeviceView_, isoCoordsShapeFcnHostView_);
+
+  Kokkos::View<const int**, Kokkos::HostSpace, Kokkos::MemoryTraits<Kokkos::Unmanaged>> scsFaceNodeMapHostView(&scsFaceNodeMap_[0][0], 12, 4);
+  Kokkos::deep_copy(scsFaceNodeMapDeviceView_, scsFaceNodeMapHostView);
   if (!std::is_same<AlgTraits, AlgTraitsHex8>::value) {
     throw std::runtime_error("MeshVelocityEdgeAlg is only supported for Hex8");
   }
@@ -91,48 +95,61 @@ MeshVelocityEdgeAlg<AlgTraits>::execute()
                                   stk::mesh::selectUnion(partVec_) &
                                   !(realm_.get_inactive_selector());
 
+  auto meSCS = meSCS_;
+//  const int* lrscv = meSCS_->adjacentNodes();
+//  const int* scsIpEdgeMap = meSCS_->scsIpEdgeOrd();
+//  const auto scsFaceNodeMap = scsFaceNodeMap_;
+//  const auto isoCoordsShapeFcn = isoCoordsShapeFcn_;
+  const auto nodesPerElement = AlgTraits::nodesPerElement_;
+  const auto nDim = AlgTraits::nDim_;
+  const auto numScsIp = AlgTraits::numScsIp_;
+
+  auto isoCoordsShapeFcn = isoCoordsShapeFcnDeviceView_;
+  auto scsFaceNodeMap = scsFaceNodeMapDeviceView_;
+
   const std::string algName =
     "compute_mesh_vel_" + std::to_string(AlgTraits::topo_);
   nalu_ngp::run_elem_algorithm(
     algName, meshInfo, stk::topology::ELEM_RANK, elemData_, sel,
     KOKKOS_LAMBDA(ElemSimdDataType & edata) {
-      const int* lrscv = meSCS_->adjacentNodes();
-      const int* scsIpEdgeMap = meSCS_->scsIpEdgeOrd();
 
       auto& scrView = edata.simdScrView;
 
       const auto& mCoords = scrView.get_scratch_view_2D(modelCoordsID);
       const auto& dispNp1 = scrView.get_scratch_view_2D(meshDispNp1ID);
       const auto& dispN = scrView.get_scratch_view_2D(meshDispNID);
+  
+      const int* lrscv = meSCS->adjacentNodes();
+      const int* scsIpEdgeMap = meSCS->scsIpEdgeOrd();
 
-      DoubleType scs_coords_n[19][AlgTraits::nDim_];
-      DoubleType scs_coords_np1[19][AlgTraits::nDim_];
+      DoubleType scs_coords_n[19][nDim];
+      DoubleType scs_coords_np1[19][nDim];
 
       for (int i = 0; i < 19; i++) {
-        for (int j = 0; j < AlgTraits::nDim_; j++) {
+        for (int j = 0; j < nDim; j++) {
           scs_coords_n[i][j] = 0.0;
           scs_coords_np1[i][j] = 0.0;
         }
-        for (int k = 0; k < AlgTraits::nodesPerElement_; k++) {
+        for (int k = 0; k < nodesPerElement; k++) {
           const DoubleType r =
-            isoCoordsShapeFcn_[i * AlgTraits::nodesPerElement_ + k];
-          for (int j = 0; j < AlgTraits::nDim_; j++) {
+            isoCoordsShapeFcn(i * nodesPerElement + k);
+          for (int j = 0; j < nDim; j++) {
             scs_coords_n[i][j] += r * (mCoords(k, j) + dispN(k, j));
             scs_coords_np1[i][j] += r * (mCoords(k, j) + dispNp1(k, j));
           }
         }
       }
 
-      for (int ip = 0; ip < AlgTraits::numScsIp_; ++ip) {
+      for (int ip = 0; ip < numScsIp; ++ip) {
 
-        const int na = scsFaceNodeMap_[ip][0];
-        const int nb = scsFaceNodeMap_[ip][1];
-        const int nc = scsFaceNodeMap_[ip][2];
-        const int nd = scsFaceNodeMap_[ip][3];
+        const int na = scsFaceNodeMap(ip, 0);
+        const int nb = scsFaceNodeMap(ip, 1);
+        const int nc = scsFaceNodeMap(ip, 2);
+        const int nd = scsFaceNodeMap(ip, 3);
 
         DoubleType scs_vol_coords[8][3];
 
-        for (int j = 0; j < AlgTraits::nDim_; j++) {
+        for (int j = 0; j < nDim; j++) {
           scs_vol_coords[0][j] = scs_coords_n[na][j];
           scs_vol_coords[1][j] = scs_coords_n[nb][j];
           scs_vol_coords[2][j] = scs_coords_n[nc][j];

@@ -36,6 +36,7 @@ Quad3DSCS::Quad3DSCS()
 //--------------------------------------------------------------------------
 //-------- ipNodeMap -------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 const int *
 Quad3DSCS::ipNodeMap(
   int /*ordinal*/) const
@@ -87,6 +88,7 @@ Quad3DSCS::shifted_shape_fcn(double *shpfc)
 //--------------------------------------------------------------------------
 //-------- shape_fcn -------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void
 Quad3DSCS::shape_fcn(SharedMemView<DoubleType**, DeviceShmem> &shpfc)
 {
@@ -96,12 +98,14 @@ Quad3DSCS::shape_fcn(SharedMemView<DoubleType**, DeviceShmem> &shpfc)
 //--------------------------------------------------------------------------
 //-------- shifted_shape_fcn -----------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void
 Quad3DSCS::shifted_shape_fcn(SharedMemView<DoubleType**, DeviceShmem> &shpfc)
 {
   quad4_shape_fcn(intgLocShift_, shpfc);
 }
 
+KOKKOS_FUNCTION
 void
 Quad3DSCS::determinant(
   SharedMemView<DoubleType**, DeviceShmem>& coords,
@@ -151,6 +155,7 @@ Quad3DSCS::determinant(
 //--------------------------------------------------------------------------
 //-------- quad4_shape_fcn --------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void
 Quad3DSCS::quad4_shape_fcn(
   const double *isoParCoord,

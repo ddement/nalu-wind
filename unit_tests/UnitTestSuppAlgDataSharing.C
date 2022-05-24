@@ -22,7 +22,7 @@
 
 namespace {
 
-#ifndef KOKKOS_ENABLE_CUDA
+#if !(defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP))
 
 using sierra::nalu::SharedMemView;
 

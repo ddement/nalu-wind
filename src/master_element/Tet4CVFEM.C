@@ -73,6 +73,7 @@ TetSCV::TetSCV()
 //--------------------------------------------------------------------------
 //-------- ipNodeMap -------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 const int *
 TetSCV::ipNodeMap(
   int /*ordinal*/) const
@@ -84,6 +85,7 @@ TetSCV::ipNodeMap(
 //--------------------------------------------------------------------------
 //-------- determinant -----------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void TetSCV::determinant(
     SharedMemView<DoubleType**, DeviceShmem>& coordel,
     SharedMemView<DoubleType*, DeviceShmem>& volume)
@@ -189,6 +191,7 @@ void TetSCV::determinant(
 //--------------------------------------------------------------------------
 //-------- grad_op ---------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void TetSCV::grad_op(
     SharedMemView<DoubleType**, DeviceShmem>&coords,
     SharedMemView<DoubleType***, DeviceShmem>&gradop,
@@ -201,6 +204,7 @@ void TetSCV::grad_op(
 //--------------------------------------------------------------------------
 //-------- shifted_grad_op -------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void TetSCV::shifted_grad_op(
     SharedMemView<DoubleType**, DeviceShmem>&coords,
     SharedMemView<DoubleType***, DeviceShmem>&gradop,
@@ -228,6 +232,7 @@ void TetSCV::determinant(
 //--------------------------------------------------------------------------
 //-------- shape_fcn -------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void
 TetSCV::shape_fcn(SharedMemView<DoubleType**, DeviceShmem> &shpfc)
 {
@@ -243,6 +248,7 @@ TetSCV::shape_fcn(double *shpfc)
 //--------------------------------------------------------------------------
 //-------- shifted_shape_fcn -----------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void
 TetSCV::shifted_shape_fcn(SharedMemView<DoubleType**, DeviceShmem> &shpfc)
 {
@@ -258,6 +264,7 @@ TetSCV::shifted_shape_fcn(double *shpfc)
 //--------------------------------------------------------------------------
 //-------- tet_shape_fcn ---------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void
 TetSCV::tet_shape_fcn(
   const int  npts,
@@ -306,6 +313,7 @@ void TetSCV::Mij(
   generic_Mij_3d<AlgTraitsTet4>(numIntPoints_, deriv, coords, metric);
 }
 //-------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void TetSCV::Mij(
     SharedMemView<DoubleType**, DeviceShmem>& coords,
     SharedMemView<DoubleType***, DeviceShmem>& metric,
@@ -326,7 +334,7 @@ TetSCS::TetSCS()
   MasterElement::nodesPerElement_ = nodesPerElement_;
   MasterElement::numIntPoints_ = numIntPoints_;
 
-#ifndef KOKKOS_ENABLE_CUDA
+#if !(defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP))
   const double nodeLocations[4][3] = {{0,0,0}, {1,0,0}, {0,1,0}, {0,0,1}};
 
   stk::topology topo = stk::topology::TET_4;
@@ -345,6 +353,7 @@ TetSCS::TetSCS()
 //--------------------------------------------------------------------------
 //-------- ipNodeMap -------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 const int *
 TetSCS::ipNodeMap(
   int ordinal) const
@@ -356,6 +365,7 @@ TetSCS::ipNodeMap(
 //--------------------------------------------------------------------------
 //-------- side_node_ordinals ----------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 const int *
 TetSCS::side_node_ordinals ( int ordinal) const
 {
@@ -366,6 +376,7 @@ TetSCS::side_node_ordinals ( int ordinal) const
 //--------------------------------------------------------------------------
 //-------- determinant -----------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void TetSCS::determinant(
     SharedMemView<DoubleType**, DeviceShmem>& coordel,
     SharedMemView<DoubleType**, DeviceShmem>&areav)
@@ -488,6 +499,7 @@ void TetSCS::determinant(
 //--------------------------------------------------------------------------
 //-------- grad_op ---------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void TetSCS::grad_op(
     SharedMemView<DoubleType**, DeviceShmem>&coords,
     SharedMemView<DoubleType***, DeviceShmem>&gradop,
@@ -527,6 +539,7 @@ void TetSCS::grad_op(
 //--------------------------------------------------------------------------
 //-------- shifted_grad_op -------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void TetSCS::shifted_grad_op(
     SharedMemView<DoubleType**, DeviceShmem>&coords,
     SharedMemView<DoubleType***, DeviceShmem>&gradop,
@@ -603,6 +616,7 @@ void TetSCS::face_grad_op(
   }
 }
 
+KOKKOS_FUNCTION
 void TetSCS::face_grad_op(
   int /*face_ordinal*/,
   SharedMemView<DoubleType**, DeviceShmem>& coords,
@@ -616,6 +630,7 @@ void TetSCS::face_grad_op(
 //--------------------------------------------------------------------------
 //-------- shifted_face_grad_op --------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void TetSCS::shifted_face_grad_op(
   int face_ordinal,
   SharedMemView<DoubleType**, DeviceShmem>& coords,
@@ -667,6 +682,7 @@ void TetSCS::shifted_face_grad_op(
 //--------------------------------------------------------------------------
 //-------- gij ------------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void TetSCS::gij(
     SharedMemView<DoubleType**, DeviceShmem>& coords,
     SharedMemView<DoubleType***, DeviceShmem>& gupper,
@@ -702,6 +718,7 @@ void TetSCS::Mij(
   generic_Mij_3d<AlgTraitsTet4>(numIntPoints_, deriv, coords, metric);
 }
 //-------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void TetSCS::Mij(
     SharedMemView<DoubleType**, DeviceShmem>& coords,
     SharedMemView<DoubleType***, DeviceShmem>& metric,
@@ -714,6 +731,7 @@ void TetSCS::Mij(
 //--------------------------------------------------------------------------
 //-------- adjacentNodes ---------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 const int *
 TetSCS::adjacentNodes()
 {
@@ -724,6 +742,7 @@ TetSCS::adjacentNodes()
 //--------------------------------------------------------------------------
 //-------- scsIpEdgeOrd ----------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 const int *
 TetSCS::scsIpEdgeOrd()
 {
@@ -733,6 +752,7 @@ TetSCS::scsIpEdgeOrd()
 //--------------------------------------------------------------------------
 //-------- shape_fcn -------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void
 TetSCS::shape_fcn(SharedMemView<DoubleType**, DeviceShmem> &shpfc)
 {
@@ -748,6 +768,7 @@ TetSCS::shape_fcn(double *shpfc)
 //--------------------------------------------------------------------------
 //-------- shifted_shape_fcn -----------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void
 TetSCS::shifted_shape_fcn(SharedMemView<DoubleType**, DeviceShmem> &shpfc)
 {
@@ -763,6 +784,7 @@ TetSCS::shifted_shape_fcn(double *shpfc)
 //--------------------------------------------------------------------------
 //-------- tet_shape_fcn ---------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void
 TetSCS::tet_shape_fcn(
   const int  npts,
@@ -803,6 +825,7 @@ TetSCS::tet_shape_fcn(
 //--------------------------------------------------------------------------
 //-------- opposingNodes --------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 int
 TetSCS::opposingNodes(
   const int ordinal,
@@ -814,6 +837,7 @@ TetSCS::opposingNodes(
 //--------------------------------------------------------------------------
 //-------- opposingFace --------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 int
 TetSCS::opposingFace(
   const int ordinal,

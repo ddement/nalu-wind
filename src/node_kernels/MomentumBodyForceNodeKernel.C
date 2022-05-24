@@ -38,6 +38,7 @@ void MomentumBodyForceNodeKernel::setup(Realm& realm)
   dualNodalVolume_ = fieldMgr.get_field<double>(dualNodalVolumeID_);
 }
 
+KOKKOS_FUNCTION
 void
 MomentumBodyForceNodeKernel::execute(
   NodeKernelTraits::LhsType&,

@@ -16,7 +16,7 @@
 #include "node_kernels/TKESSTAMSNodeKernel.h"
 #include "node_kernels/MomentumSSTAMSForcingNodeKernel.h"
 
-#ifndef KOKKOS_ENABLE_CUDA
+#if !(defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP))
 namespace {
 namespace hex8_golds {
 namespace tke_ams {
@@ -92,7 +92,7 @@ TEST_F(AMSKernelHex8Mesh, NGP_tke_ams_node)
 
   helperObjs.execute();
 
-#ifndef KOKKOS_ENABLE_CUDA
+#if !(defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP))
   EXPECT_EQ(helperObjs.linsys->lhs_.extent(0), 8u);
   EXPECT_EQ(helperObjs.linsys->lhs_.extent(1), 8u);
   EXPECT_EQ(helperObjs.linsys->rhs_.extent(0), 8u);
@@ -124,7 +124,7 @@ TEST_F(AMSKernelHex8Mesh, NGP_sdr_ams_node)
 
   helperObjs.execute();
 
-#ifndef KOKKOS_ENABLE_CUDA
+#if !(defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP))
   EXPECT_EQ(helperObjs.linsys->lhs_.extent(0), 8u);
   EXPECT_EQ(helperObjs.linsys->lhs_.extent(1), 8u);
   EXPECT_EQ(helperObjs.linsys->rhs_.extent(0), 8u);
@@ -167,7 +167,7 @@ TEST_F(AMSKernelHex8Mesh, NGP_ams_forcing)
 
   helperObjs.execute();
 
-#ifndef KOKKOS_ENABLE_CUDA
+#if !(defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP))
   EXPECT_EQ(helperObjs.linsys->lhs_.extent(0), 24u);
   EXPECT_EQ(helperObjs.linsys->lhs_.extent(1), 24u);
   EXPECT_EQ(helperObjs.linsys->rhs_.extent(0), 24u);

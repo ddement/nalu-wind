@@ -57,6 +57,7 @@ BLTGammaM2015NodeKernel::setup(Realm& realm)
   ceTwo_ = realm.get_turb_model_constant(TM_ceTwo);
 }
 
+KOKKOS_FUNCTION
 double
 BLTGammaM2015NodeKernel::FPG(const double& lamda0L )
 {
@@ -107,6 +108,7 @@ BLTGammaM2015NodeKernel::BLTmax(const double& g1, const double& g2 )
   return out;
 }
 
+KOKKOS_FUNCTION
 void
 BLTGammaM2015NodeKernel::execute(
   NodeKernelTraits::LhsType& lhs,

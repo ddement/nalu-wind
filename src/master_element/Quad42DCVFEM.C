@@ -116,6 +116,7 @@ Quad42DSCV::Quad42DSCV()
 //--------------------------------------------------------------------------
 //-------- ipNodeMap -------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 const int *
 Quad42DSCV::ipNodeMap(
   int /*ordinal*/) const
@@ -127,6 +128,7 @@ Quad42DSCV::ipNodeMap(
 //--------------------------------------------------------------------------
 //-------- determinant -----------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void Quad42DSCV::determinant(
   SharedMemView<DoubleType**, DeviceShmem> &coords,
   SharedMemView<DoubleType*, DeviceShmem> &vol) {
@@ -202,6 +204,7 @@ void Quad42DSCV::determinant(
 //--------------------------------------------------------------------------
 //-------- grad_op ---------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void Quad42DSCV::grad_op(
   SharedMemView<DoubleType**, DeviceShmem>& coords,
   SharedMemView<DoubleType***, DeviceShmem>& gradop,
@@ -228,6 +231,7 @@ void Quad42DSCV::determinant(
 //--------------------------------------------------------------------------
 //-------- shifted_grad_op -------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void Quad42DSCV::shifted_grad_op(
   SharedMemView<DoubleType**, DeviceShmem>& coords,
   SharedMemView<DoubleType***, DeviceShmem>& gradop,
@@ -240,6 +244,7 @@ void Quad42DSCV::shifted_grad_op(
 //--------------------------------------------------------------------------
 //-------- shape_fcn -------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void
 Quad42DSCV::shape_fcn(SharedMemView<DoubleType**, DeviceShmem> &shpfc) {
   quad_shape_fcn(intgLoc_, shpfc);
@@ -254,6 +259,7 @@ Quad42DSCV::shape_fcn(double *shpfc)
 //--------------------------------------------------------------------------
 //-------- shifted_shape_fcn -----------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void
 Quad42DSCV::shifted_shape_fcn(SharedMemView<DoubleType**, DeviceShmem> &shpfc) 
 {
@@ -269,6 +275,7 @@ Quad42DSCV::shifted_shape_fcn(double *shpfc)
 //--------------------------------------------------------------------------
 //-------- quad_shape_fcn ---------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void 
 Quad42DSCV::quad_shape_fcn(
   const double *isoParCoord, 
@@ -320,6 +327,7 @@ void Quad42DSCV::Mij(
   generic_Mij_2d<AlgTraitsQuad4_2D>(numIntPoints_, deriv, coords, metric);
 }
 //-------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void Quad42DSCV::Mij(
   SharedMemView<DoubleType**, DeviceShmem>& coords,
   SharedMemView<DoubleType***, DeviceShmem>& metric,
@@ -339,7 +347,7 @@ Quad42DSCS::Quad42DSCS()
   MasterElement::nodesPerElement_ = nodesPerElement_;
   MasterElement::numIntPoints_ = numIntPoints_;
 
-#ifndef KOKKOS_ENABLE_CUDA
+#if !(defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP))
   const double nodeLocations[4][2] =
   {
       {-0.5,-0.5}, {+0.5,-0.5},
@@ -360,6 +368,7 @@ Quad42DSCS::Quad42DSCS()
 //--------------------------------------------------------------------------
 //-------- ipNodeMap -------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 const int *
 Quad42DSCS::ipNodeMap(
   int ordinal) const
@@ -372,6 +381,7 @@ Quad42DSCS::ipNodeMap(
 //--------------------------------------------------------------------------
 //-------- side_node_ordinals ----------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 const int *
 Quad42DSCS::side_node_ordinals ( int ordinal) const
 {
@@ -382,6 +392,7 @@ Quad42DSCS::side_node_ordinals ( int ordinal) const
 //--------------------------------------------------------------------------
 //-------- determinant -----------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void Quad42DSCS::determinant(
   SharedMemView<DoubleType**, DeviceShmem>& coords,
   SharedMemView<DoubleType**, DeviceShmem>& areav) {
@@ -463,6 +474,7 @@ void Quad42DSCS::determinant(
 //--------------------------------------------------------------------------
 //-------- grad_op ---------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void Quad42DSCS::grad_op(
   SharedMemView<DoubleType**, DeviceShmem>& coords,
   SharedMemView<DoubleType***, DeviceShmem>& gradop,
@@ -501,6 +513,7 @@ void Quad42DSCS::grad_op(
 //--------------------------------------------------------------------------
 //-------- shifted_grad_op -------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void Quad42DSCS::shifted_grad_op(
   SharedMemView<DoubleType**, DeviceShmem>& coords,
   SharedMemView<DoubleType***, DeviceShmem>& gradop,
@@ -538,6 +551,7 @@ void Quad42DSCS::shifted_grad_op(
 //--------------------------------------------------------------------------
 //-------- face_grad_op ----------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void Quad42DSCS::face_grad_op(
   const int face_ordinal,
   const bool shifted,
@@ -551,6 +565,7 @@ void Quad42DSCS::face_grad_op(
   generic_grad_op<traits>(deriv, coords, gradop);
 }
 
+KOKKOS_FUNCTION
 void Quad42DSCS::face_grad_op(
   int face_ordinal,
   SharedMemView<DoubleType**, DeviceShmem>& coords,
@@ -600,6 +615,7 @@ void Quad42DSCS::face_grad_op(
 //--------------------------------------------------------------------------
 //-------- shifted_face_grad_op --------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void Quad42DSCS::shifted_face_grad_op(
   int face_ordinal,
   SharedMemView<DoubleType**, DeviceShmem>& coords,
@@ -649,6 +665,7 @@ void Quad42DSCS::shifted_face_grad_op(
 //--------------------------------------------------------------------------
 //-------- gij -------------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void Quad42DSCS::gij(
   SharedMemView<DoubleType**, DeviceShmem>& coords,
   SharedMemView<DoubleType***, DeviceShmem>& gupper,
@@ -728,6 +745,7 @@ void Quad42DSCS::Mij(
   generic_Mij_2d<AlgTraitsQuad4_2D>(numIntPoints_, deriv, coords, metric);
 }
 //-------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void Quad42DSCS::Mij(
   SharedMemView<DoubleType**, DeviceShmem>& coords,
   SharedMemView<DoubleType***, DeviceShmem>& metric,
@@ -739,6 +757,7 @@ void Quad42DSCS::Mij(
 //--------------------------------------------------------------------------
 //-------- adjacentNodes ---------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 const int *
 Quad42DSCS::adjacentNodes()
 {
@@ -749,6 +768,7 @@ Quad42DSCS::adjacentNodes()
 //--------------------------------------------------------------------------
 //-------- scsIpEdgeOrd ----------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 const int *
 Quad42DSCS::scsIpEdgeOrd()
 {
@@ -758,6 +778,7 @@ Quad42DSCS::scsIpEdgeOrd()
 //--------------------------------------------------------------------------
 //-------- opposingNodes --------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 int
 Quad42DSCS::opposingNodes(
   const int ordinal,
@@ -769,6 +790,7 @@ Quad42DSCS::opposingNodes(
 //--------------------------------------------------------------------------
 //-------- opposingFace --------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 int
 Quad42DSCS::opposingFace(
   const int ordinal,
@@ -780,6 +802,7 @@ Quad42DSCS::opposingFace(
 //--------------------------------------------------------------------------
 //-------- shape_fcn -------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void 
 Quad42DSCS::shape_fcn(SharedMemView<DoubleType**, DeviceShmem> &shpfc) {
   quad_shape_fcn(intgLoc_, shpfc);
@@ -794,6 +817,7 @@ Quad42DSCS::shape_fcn(double *shpfc)
 //--------------------------------------------------------------------------
 //-------- shifted_shape_fcn -----------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void
 Quad42DSCS::shifted_shape_fcn(SharedMemView<DoubleType**, DeviceShmem> &shpfc) 
 {
@@ -809,6 +833,7 @@ Quad42DSCS::shifted_shape_fcn(double *shpfc)
 //--------------------------------------------------------------------------
 //-------- quad_shape_fcn ---------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void
 Quad42DSCS::quad_shape_fcn(
   const double *isoParCoord, 

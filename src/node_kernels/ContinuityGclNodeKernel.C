@@ -54,6 +54,7 @@ ContinuityGclNodeKernel::setup(Realm& realm)
   gamma3_ = realm.get_gamma3();
 }
 
+KOKKOS_FUNCTION
 void
 ContinuityGclNodeKernel::execute(
   NodeKernelTraits::LhsType& /*lhs*/,

@@ -343,7 +343,7 @@ protected:
       unit_test_utils::create_one_reference_element(bulk, stk::topology::HEX_8);
     }
 
-#ifndef KOKKOS_ENABLE_CUDA
+#if !(defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP))
     void setup_poly_order_2_hex_27() {
       poly_order = 2;
       topo = stk::topology::HEX_27;
@@ -388,7 +388,7 @@ TEST_F(MasterElementHexSerialNGP, hex8_scs_derivatives)
   }
 }
 
-#ifndef KOKKOS_ENABLE_CUDA
+#if !(defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP))
 
 TEST_F(MasterElementHexSerialNGP, hex27_scs_interpolation)
 {

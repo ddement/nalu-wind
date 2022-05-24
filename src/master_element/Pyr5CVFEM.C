@@ -295,6 +295,7 @@ DoubleType octohedron_volume_by_triangle_facets(const DoubleType volcoords[10][3
 //--------------------------------------------------------------------------
 //-------- determinant -----------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void PyrSCV::determinant(
     SharedMemView<DoubleType**, DeviceShmem>& cordel,
     SharedMemView<DoubleType*, DeviceShmem>& vol)
@@ -433,6 +434,7 @@ void PyrSCV::determinant(
 //--------------------------------------------------------------------------
 //-------- grad_op ---------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void PyrSCV::grad_op(
     SharedMemView<DoubleType**, DeviceShmem>& coords,
     SharedMemView<DoubleType***, DeviceShmem>& gradop,
@@ -445,6 +447,7 @@ void PyrSCV::grad_op(
 //--------------------------------------------------------------------------
 //-------- shifted_grad_op ---------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void PyrSCV::shifted_grad_op(
     SharedMemView<DoubleType**, DeviceShmem>& coords,
     SharedMemView<DoubleType***, DeviceShmem>& gradop,
@@ -470,13 +473,15 @@ void PyrSCV::determinant(
       volume, error, &lerr );
 }
 
-KOKKOS_FUNCTION void
+KOKKOS_FUNCTION 
+void
 PyrSCV::shape_fcn(SharedMemView<DoubleType**, DeviceShmem> &shpfc)
 {
   pyramid_shape_fcn(numIntPoints_, &intgLoc_[0], shpfc);
 }
 
-KOKKOS_FUNCTION void
+KOKKOS_FUNCTION 
+void
 PyrSCV::shifted_shape_fcn(
   SharedMemView<DoubleType**, DeviceShmem> &shpfc)
 {
@@ -563,6 +568,7 @@ void PyrSCS::Mij(
   generic_Mij_3d<AlgTraitsPyr5>(numIntPoints_, deriv, coords, metric);
 }
 //-------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void PyrSCS::Mij(
     SharedMemView<DoubleType**, DeviceShmem>& coords,
     SharedMemView<DoubleType***, DeviceShmem>& metric,
@@ -603,7 +609,7 @@ PyrSCS::PyrSCS()
   MasterElement::nDim_ = nDim_;
   MasterElement::nodesPerElement_ = nodesPerElement_;
   MasterElement::numIntPoints_ = numIntPoints_;
-#ifndef KOKKOS_ENABLE_CUDA
+#if !(defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP))
   fill_intg_exp_face_shift(intgExpFaceShift_, sideNodeOrdinals_);
 #endif
 }
@@ -611,6 +617,7 @@ PyrSCS::PyrSCS()
 //--------------------------------------------------------------------------
 //-------- side_node_ordinals ----------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 const int *
 PyrSCS::side_node_ordinals (
   int ordinal) const
@@ -622,6 +629,7 @@ PyrSCS::side_node_ordinals (
 //--------------------------------------------------------------------------
 //-------- determinant -----------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void PyrSCS::determinant(
     SharedMemView<DoubleType**, DeviceShmem>& cordel,
     SharedMemView<DoubleType**, DeviceShmem>& areav)
@@ -769,6 +777,7 @@ void PyrSCS::determinant(
 //--------------------------------------------------------------------------
 //-------- grad_op ---------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void PyrSCS::grad_op(
     SharedMemView<DoubleType**, DeviceShmem>& coords,
     SharedMemView<DoubleType***, DeviceShmem>& gradop,
@@ -806,6 +815,7 @@ void PyrSCS::grad_op(
 //--------------------------------------------------------------------------
 //-------- shifted_grad_op -------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void PyrSCS::shifted_grad_op(
     SharedMemView<DoubleType**, DeviceShmem>& coords,
     SharedMemView<DoubleType***, DeviceShmem>& gradop,
@@ -883,6 +893,7 @@ void PyrSCS::face_grad_op(
 //--------------------------------------------------------------------------
 //-------- face_grad_op ----------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void PyrSCS::face_grad_op(
   int face_ordinal,
   SharedMemView<DoubleType**, DeviceShmem>& coords,
@@ -903,6 +914,7 @@ void PyrSCS::face_grad_op(
 //--------------------------------------------------------------------------
 //-------- shifted_face_grad_op --------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void PyrSCS::shifted_face_grad_op(
   int face_ordinal,
   SharedMemView<DoubleType**, DeviceShmem>& coords,
@@ -1204,6 +1216,7 @@ void PyrSCS::shifted_pyr_derivative(
 //--------------------------------------------------------------------------
 //-------- gij -------------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void PyrSCS::gij( 
     SharedMemView<DoubleType**, DeviceShmem>& coords,
     SharedMemView<DoubleType***, DeviceShmem>& gupper,
@@ -1239,6 +1252,7 @@ void PyrSCV::Mij(
   generic_Mij_3d<AlgTraitsPyr5>(numIntPoints_, deriv, coords, metric);
 }
 //-------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void PyrSCV::Mij(
     SharedMemView<DoubleType**, DeviceShmem>& coords,
     SharedMemView<DoubleType***, DeviceShmem>& metric,
@@ -1251,6 +1265,7 @@ void PyrSCV::Mij(
 //--------------------------------------------------------------------------
 //-------- adjacentNodes ---------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 const int *
 PyrSCS::adjacentNodes()
 {
@@ -1261,19 +1276,22 @@ PyrSCS::adjacentNodes()
 //--------------------------------------------------------------------------
 //-------- scsIpEdgeOrd ----------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 const int *
 PyrSCS::scsIpEdgeOrd()
 {
   return &scsIpEdgeOrd_[0];
 }
 
-KOKKOS_FUNCTION void
+KOKKOS_FUNCTION 
+void
 PyrSCS::shape_fcn(SharedMemView<DoubleType**, DeviceShmem> &shpfc)
 {
   pyramid_shape_fcn(numIntPoints_, &intgLoc_[0], shpfc);
 }
 
-KOKKOS_FUNCTION void
+KOKKOS_FUNCTION 
+void
 PyrSCS::shifted_shape_fcn(
   SharedMemView<DoubleType**, DeviceShmem> &shpfc)
 {
@@ -1352,6 +1370,7 @@ PyrSCS::shifted_pyr_shape_fcn(
 //--------------------------------------------------------------------------
 //-------- opposingNodes --------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 int
 PyrSCS::opposingNodes(
   const int ordinal,
@@ -1363,6 +1382,7 @@ PyrSCS::opposingNodes(
 //--------------------------------------------------------------------------
 //-------- opposingFace --------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 int
 PyrSCS::opposingFace(
   const int ordinal,
@@ -1374,6 +1394,7 @@ PyrSCS::opposingFace(
 //--------------------------------------------------------------------------
 //-------- ipNodeMap -------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 const int *
 PyrSCS::ipNodeMap(
   int ordinal) const

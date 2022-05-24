@@ -111,7 +111,7 @@ AssembleFaceElemSolverAlgorithm::execute()
             smdata.simdElemViews, smdata.elemFaceOrdinal);
         }
 
-#ifdef KOKKOS_ENABLE_CUDA
+#if defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP)
         const int simdIndex = 0;
 #else
         for(int simdIndex=0; simdIndex<smdata.numSimdFaces; ++simdIndex)

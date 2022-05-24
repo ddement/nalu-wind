@@ -151,6 +151,7 @@ void Hex8FEM::grad_op(
 //--------------------------------------------------------------------------
 //-------- grad_op ---------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void Hex8FEM::grad_op_fem(
   SharedMemView<DoubleType**, DeviceShmem>&coords,
   SharedMemView<DoubleType***, DeviceShmem>&gradop,
@@ -190,6 +191,7 @@ void Hex8FEM::shifted_grad_op(
 //--------------------------------------------------------------------------
 //-------- shifted_grad_op -------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void Hex8FEM::shifted_grad_op_fem(
   SharedMemView<DoubleType**, DeviceShmem>&coords,
   SharedMemView<DoubleType***, DeviceShmem>&gradop,
@@ -279,6 +281,7 @@ Hex8FEM::shifted_shape_fcn(double *shpfc)
 //--------------------------------------------------------------------------
 //-------- shape_fcn -------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void
 Hex8FEM::shape_fcn(SharedMemView<DoubleType**, DeviceShmem> &shpfc)
 {
@@ -288,6 +291,7 @@ Hex8FEM::shape_fcn(SharedMemView<DoubleType**, DeviceShmem> &shpfc)
 //--------------------------------------------------------------------------
 //-------- shifted_shape_fcn -----------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void
 Hex8FEM::shifted_shape_fcn(SharedMemView<DoubleType**, DeviceShmem> &shpfc)
 {
@@ -345,6 +349,7 @@ Hex8FEM::hex8_fem_shape_fcn(
 //--------------------------------------------------------------------------
 //-------- hex8_fem_shape_fcn ----------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void
 Hex8FEM::hex8_fem_shape_fcn(
   const int  numIp,
@@ -406,6 +411,7 @@ Hex8FEM::hex8_fem_derivative(
   }                            
 }
 
+KOKKOS_FUNCTION
 void
 Hex8FEM::hex8_fem_derivative(
   const int npt, const double* par_coord,

@@ -107,7 +107,7 @@ void TiogaSTKIface::initialize()
 
 void TiogaSTKIface::execute(const bool isDecoupled)
 {
-#ifdef KOKKOS_ENABLE_CUDA
+#if defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP)
   // Bail out early if this is a GPU build and is using non-decoupled solve
   if (!isDecoupled) {
     throw std::runtime_error("Non-decoupled overset connectivity not available in NGP build");

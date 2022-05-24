@@ -37,7 +37,7 @@ double linear_scalar_value(int dim, double a, const double* b, const double* x)
 
 }
 
-#ifndef KOKKOS_ENABLE_CUDA
+#if !(defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP))
 TEST(MasterElementFunctions, generic_grad_op_3d_hex_27)
 {
   stk::mesh::MetaData meta(3);
@@ -198,7 +198,7 @@ TEST(MasterElementFunctions, generic_grad_op_2d_tri_6)
 }
 
 
-#ifndef KOKKOS_ENABLE_CUDA
+#if !(defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP))
 TEST(Hex27SCV, detj)
 {
   stk::mesh::MetaData meta(3);

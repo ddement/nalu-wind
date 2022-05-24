@@ -38,6 +38,7 @@ void MomentumActuatorNodeKernel::setup(Realm& realm)
   actuatorSrcLHS_  = fieldMgr.get_field<double>(actuatorSrcLHSID_);
 }
 
+KOKKOS_FUNCTION
 void
 MomentumActuatorNodeKernel::execute(
   NodeKernelTraits::LhsType& lhs,

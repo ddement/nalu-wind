@@ -2540,7 +2540,7 @@ MomentumEquationSystem::save_diagonal_term(
   }
 }
 
-#ifndef KOKKOS_ENABLE_CUDA
+#if !(defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP))
 void
 MomentumEquationSystem::save_diagonal_term(
   unsigned nEntities,

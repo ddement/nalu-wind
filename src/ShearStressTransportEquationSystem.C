@@ -576,6 +576,9 @@ ShearStressTransportEquationSystem::compute_f_one_blending()
     (meta.locally_owned_part() | meta.globally_shared_part()) &
     (stk::mesh::selectField(*fOneBlending_));
 
+  const double timeStepCount_ = realm_.get_time_step_count();
+  const int iterSwitchTransition_ = realm_.solutionOptions_->iterSwitchTransition_;
+  const auto gammaEqActive_ = realm_.solutionOptions_->gammaEqActive_;
   nalu_ngp::run_entity_algorithm(
     "SST::compute_fone_blending", ngpMesh, stk::topology::NODE_RANK, sel,
     KOKKOS_LAMBDA(const MeshIndex& mi) {
@@ -584,8 +587,8 @@ ShearStressTransportEquationSystem::compute_f_one_blending()
       const double rho = density.get(mi, 0);
       const double mu = viscosity.get(mi, 0);
       const double minD = ndtw.get(mi, 0);
-      const double timeStepCount_ = realm_.get_time_step_count();
-      const int iterSwitchTransition_ = realm_.solutionOptions_->iterSwitchTransition_;
+    //  const double timeStepCount_ = realm_.get_time_step_count();
+//      const int iterSwitchTransition_ = realm_.solutionOptions_->iterSwitchTransition_;
       // cross diffusion
       double crossdiff = 0.0;
       for (int d = 0; d < ndim; ++d)
@@ -604,7 +607,7 @@ ShearStressTransportEquationSystem::compute_f_one_blending()
       fOneBlend.get(mi, 0) =
         stk::math::tanh(fArgOne * fArgOne * fArgOne * fArgOne);
 
-      if (realm_.solutionOptions_->gammaEqActive_ && timeStepCount_ >= iterSwitchTransition_) {
+      if (gammaEqActive_ && timeStepCount_ >= iterSwitchTransition_) {
         // modifications for transition model
         const double f1Orig = fOneBlend.get(mi, 0);
         const double ry = rho * minD * std::sqrt(tke)/mu;

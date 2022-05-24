@@ -78,6 +78,7 @@ NGPApplyCoeff::NGPApplyCoeff(EquationSystem* eqSystem)
   deviceSumIntoPtr_ = deviceSumInto_.get();
 }
 
+KOKKOS_FUNCTION
 void NGPApplyCoeff::extract_diagonal(
   const unsigned int nEntities,
   const stk::mesh::NgpMesh::ConnectedNodes& entities,
@@ -95,6 +96,7 @@ void NGPApplyCoeff::extract_diagonal(
   }
 }
 
+KOKKOS_FUNCTION
 void
 NGPApplyCoeff::reset_overset_rows(
   const unsigned int nEntities,
@@ -119,6 +121,7 @@ NGPApplyCoeff::reset_overset_rows(
   }
 }
 
+KOKKOS_FUNCTION
 void NGPApplyCoeff::operator()(
   unsigned numMeshobjs,
   const stk::mesh::NgpMesh::ConnectedNodes& symMeshobjs,

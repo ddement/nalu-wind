@@ -26,6 +26,7 @@ namespace nalu{
 //--------------------------------------------------------------------------
 //-------- constructor -----------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 Quad93DSCS::Quad93DSCS()
   : MasterElement()
 {
@@ -33,7 +34,7 @@ Quad93DSCS::Quad93DSCS()
   MasterElement::numIntPoints_ = numIntPoints_;
   MasterElement::nodesPerElement_ = nodesPerElement_;
 
-#ifndef KOKKOS_ENABLE_CUDA
+#if !(defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP))
   // set up integration rule and relevant maps on scs
   set_interior_info();
 
@@ -130,6 +131,7 @@ Quad93DSCS::eval_shape_derivs_at_shifted_ips()
 //--------------------------------------------------------------------------
 //-------- shape_fcn -------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void
 Quad93DSCS::shape_fcn(SharedMemView<DoubleType**, DeviceShmem> &shpfc)
 {
@@ -151,6 +153,7 @@ Quad93DSCS::shape_fcn(double* shpfc)
 //--------------------------------------------------------------------------
 //-------- shifted_shape_fcn -----------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void
 Quad93DSCS::shifted_shape_fcn(SharedMemView<DoubleType**, DeviceShmem> &shpfc)
 {
@@ -316,6 +319,7 @@ Quad93DSCS::quad9_shape_deriv(
 //--------------------------------------------------------------------------
 //-------- ipNodeMap -------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 const int *
 Quad93DSCS::ipNodeMap(
   int /*ordinal*/) const

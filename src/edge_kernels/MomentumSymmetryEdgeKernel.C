@@ -57,6 +57,7 @@ MomentumSymmetryEdgeKernel<BcAlgTraits>::MomentumSymmetryEdgeKernel(
 }
 
 template <typename BcAlgTraits>
+KOKKOS_FUNCTION
 void
 MomentumSymmetryEdgeKernel<BcAlgTraits>::execute(
   SharedMemView<DoubleType**, DeviceShmem>& lhs,

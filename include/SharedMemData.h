@@ -33,7 +33,7 @@ struct SharedMemData {
          unsigned rhsSize)
      : simdPrereqData(team, nDim, nodesPerEntity, dataNeededByKernels)
     {
-#ifndef KOKKOS_ENABLE_CUDA
+#if !(defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP))
         for(int simdIndex=0; simdIndex<simdLen; ++simdIndex) {
           prereqData[simdIndex] = std::unique_ptr<ScratchViews<double,TEAMHANDLETYPE,SHMEM> >(new ScratchViews<double,TEAMHANDLETYPE,SHMEM>(team, nDim, nodesPerEntity, dataNeededByKernels));
         }
@@ -56,7 +56,7 @@ struct SharedMemData {
 
     stk::mesh::NgpMesh::ConnectedNodes ngpElemNodes[simdLen];
     int numSimdElems;
-#ifdef KOKKOS_ENABLE_CUDA
+#if defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP)
     ScratchViews<DoubleType,TEAMHANDLETYPE,SHMEM>* prereqData[1];
 #else
     std::unique_ptr<ScratchViews<double,TEAMHANDLETYPE,SHMEM>> prereqData[simdLen];
@@ -84,7 +84,7 @@ struct SharedMemData_FaceElem {
      : simdFaceViews(team, nDim, nodesPerFace, faceDataNeeded),
        simdElemViews(team, nDim, nodesPerElem, elemDataNeeded)
     {
-#ifndef KOKKOS_ENABLE_CUDA
+#if !(defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP))
         for(int simdIndex=0; simdIndex<simdLen; ++simdIndex) {
           faceViews[simdIndex] = std::unique_ptr<ScratchViews<double,TEAMHANDLETYPE,SHMEM> >(new ScratchViews<double,TEAMHANDLETYPE,SHMEM>(team, nDim, nodesPerFace, faceDataNeeded));
           elemViews[simdIndex] = std::unique_ptr<ScratchViews<double,TEAMHANDLETYPE,SHMEM> >(new ScratchViews<double,TEAMHANDLETYPE,SHMEM>(team, nDim, nodesPerElem, elemDataNeeded));
@@ -111,7 +111,7 @@ struct SharedMemData_FaceElem {
     stk::mesh::NgpMesh::ConnectedNodes ngpConnectedNodes[simdLen];
     int numSimdFaces;
     int elemFaceOrdinal;
-#ifdef KOKKOS_ENABLE_CUDA
+#if defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP)
     ScratchViews<DoubleType,TEAMHANDLETYPE,SHMEM>* faceViews[1];
     ScratchViews<DoubleType,TEAMHANDLETYPE,SHMEM>* elemViews[1];
 #else

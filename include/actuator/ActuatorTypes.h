@@ -23,6 +23,9 @@ namespace nalu {
 #ifdef KOKKOS_ENABLE_CUDA
 using ActuatorMemSpace = Kokkos::CudaSpace;
 using ActuatorExecutionSpace = Kokkos::DefaultExecutionSpace;
+#elif defined(KOKKOS_ENABLE_HIP)
+using ActuatorMemSpace = Kokkos::Experimental::HIPSpace;
+using ActuatorExecutionSpace = Kokkos::DefaultExecutionSpace;
 #else
 using ActuatorMemSpace = Kokkos::HostSpace;
 using ActuatorExecutionSpace = Kokkos::DefaultHostExecutionSpace;

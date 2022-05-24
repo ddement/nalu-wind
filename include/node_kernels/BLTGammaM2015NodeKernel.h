@@ -49,6 +49,7 @@ public:
     NodeKernelTraits::RhsType&,
     const stk::mesh::FastMeshIndex&) override;
 
+  KOKKOS_FUNCTION
   double FPG(const double& out);
   double BLTmax(const double& g1, const double& g2);
 

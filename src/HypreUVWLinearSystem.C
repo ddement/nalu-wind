@@ -821,7 +821,7 @@ HypreUVWLinearSystem::HypreUVWLinSysCoeffApplier::resetRows(
 void
 HypreUVWLinearSystem::HypreUVWLinSysCoeffApplier::free_device_pointer()
 {
-#ifdef KOKKOS_ENABLE_CUDA
+#if defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP)
   if (this != devicePointer_) {
     sierra::nalu::kokkos_free_on_device(devicePointer_);
     devicePointer_ = nullptr;
@@ -832,7 +832,7 @@ HypreUVWLinearSystem::HypreUVWLinSysCoeffApplier::free_device_pointer()
 sierra::nalu::CoeffApplier*
 HypreUVWLinearSystem::HypreUVWLinSysCoeffApplier::device_pointer()
 {
-#ifdef KOKKOS_ENABLE_CUDA
+#if defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP)
   if (devicePointer_ != nullptr) {
     sierra::nalu::kokkos_free_on_device(devicePointer_);
     devicePointer_ = nullptr;

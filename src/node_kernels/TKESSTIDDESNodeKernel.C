@@ -67,6 +67,7 @@ TKESSTIDDESNodeKernel::setup(Realm& realm)
   iddes_Ct_ = realm.get_turb_model_constant(TM_iddes_Ct);
 }
 
+KOKKOS_FUNCTION
 void TKESSTIDDESNodeKernel::execute(
   NodeKernelTraits::LhsType& lhs,
   NodeKernelTraits::RhsType& rhs,

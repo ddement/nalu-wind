@@ -339,6 +339,7 @@ SharedMemView<T****,SHMEM>& ScratchViews<T,TEAMHANDLETYPE,SHMEM>::get_scratch_vi
 }
 
 template<typename T, typename TEAMHANDLETYPE, typename SHMEM>
+KOKKOS_FUNCTION
 int MasterElementViews<T, TEAMHANDLETYPE, SHMEM>::create_master_element_views(
   const TEAMHANDLETYPE& team,
   const ElemDataRequestsGPU::DataEnumView& dataEnums,
@@ -630,6 +631,7 @@ void MasterElementViews<T, TEAMHANDLETYPE, SHMEM>::fill_master_element_views_new
 }
 
 template<typename T, typename TEAMHANDLETYPE, typename SHMEM>
+KOKKOS_FUNCTION
 void MasterElementViews<T, TEAMHANDLETYPE, SHMEM>::fill_static_meviews(
   const ElemDataRequestsGPU::DataEnumView& dataEnums,
   MasterElement* meFC,
@@ -679,6 +681,7 @@ void MasterElementViews<T, TEAMHANDLETYPE, SHMEM>::fill_static_meviews(
 }
 
 template<typename T, typename TEAMHANDLETYPE, typename SHMEM>
+KOKKOS_FUNCTION
 void MasterElementViews<T, TEAMHANDLETYPE, SHMEM>::fill_master_element_views_new_me(
   const ElemDataRequestsGPU::DataEnumView& dataEnums,
   SharedMemView<DoubleType**, SHMEM>* coordsView,
@@ -767,6 +770,7 @@ void MasterElementViews<T, TEAMHANDLETYPE, SHMEM>::fill_master_element_views_new
 }
 
 template<typename T,typename TEAMHANDLETYPE,typename SHMEM>
+KOKKOS_FUNCTION
 ScratchViews<T,TEAMHANDLETYPE,SHMEM>::ScratchViews(const TEAMHANDLETYPE& team,
              unsigned nDim,
              int nodalGatherSize,
@@ -795,6 +799,7 @@ ScratchViews<T,TEAMHANDLETYPE,SHMEM>::ScratchViews(const TEAMHANDLETYPE& team,
 }
 
 template<typename T,typename TEAMHANDLETYPE,typename SHMEM>
+KOKKOS_FUNCTION
 void ScratchViews<T,TEAMHANDLETYPE,SHMEM>::create_needed_master_element_views(const TEAMHANDLETYPE& team,
                                         const ElemDataRequestsGPU& dataNeeded,
                                         int nDim, int nodesPerFace, int nodesPerElem,
@@ -815,6 +820,7 @@ void ScratchViews<T,TEAMHANDLETYPE,SHMEM>::create_needed_master_element_views(co
 }
 
 template <typename T, typename TEAMHANDLETYPE, typename SHMEM>
+KOKKOS_FUNCTION
 void
 ScratchViews<T, TEAMHANDLETYPE, SHMEM>::fill_static_meviews(
   const ElemDataRequestsGPU& dataNeeded)

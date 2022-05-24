@@ -58,6 +58,7 @@ void MotionScalingKernel::load(const YAML::Node& node)
   }
 }
 
+KOKKOS_FUNCTION
 mm::TransMatType MotionScalingKernel::build_transformation(
   const double& time,
   const mm::ThreeDVecType& /* xyz */)
@@ -98,6 +99,7 @@ mm::TransMatType MotionScalingKernel::build_transformation(
   return add_motion(tempMat,transMat);
 }
 
+KOKKOS_FUNCTION
 mm::ThreeDVecType MotionScalingKernel::compute_velocity(
   const double& time,
   const mm::TransMatType& compTrans,

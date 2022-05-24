@@ -44,6 +44,7 @@ MomentumABLWallShearStressEdgeKernel<BcAlgTraits>::MomentumABLWallShearStressEdg
 }
 
 template<typename BcAlgTraits>
+KOKKOS_FUNCTION
 void
 MomentumABLWallShearStressEdgeKernel<BcAlgTraits>::execute(
   SharedMemView<DoubleType**, DeviceShmem>& /* lhs */,

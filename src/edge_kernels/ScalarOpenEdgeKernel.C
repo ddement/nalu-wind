@@ -42,6 +42,7 @@ ScalarOpenEdgeKernel<BcAlgTraits>::ScalarOpenEdgeKernel(
 }
 
 template<typename BcAlgTraits>
+KOKKOS_FUNCTION
 void ScalarOpenEdgeKernel<BcAlgTraits>::execute(
   SharedMemView<DoubleType**, DeviceShmem>& lhs,
   SharedMemView<DoubleType*, DeviceShmem>& rhs,

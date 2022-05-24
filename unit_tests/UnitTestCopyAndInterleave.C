@@ -85,7 +85,7 @@ bool check_view(const ViewType& v)
   return true;
 }
 
-#ifndef KOKKOS_ENABLE_CUDA
+#if !(defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP))
 
 void do_the_multidimviews_test()
 {

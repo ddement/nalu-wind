@@ -594,6 +594,7 @@ class Realm {
   double get_gamma1();
   double get_gamma2();
   double get_gamma3();
+
   int get_time_step_count() const;
   double get_time_step_from_file();
   bool get_is_fixed_time_step();

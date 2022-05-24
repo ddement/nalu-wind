@@ -38,6 +38,7 @@ MomentumCoriolisNodeKernel::setup(Realm& realm)
   densityNp1_ = fieldMgr.get_field<double>(densityNp1ID_);
 }
 
+KOKKOS_FUNCTION
 void
 MomentumCoriolisNodeKernel::execute(
   NodeKernelTraits::LhsType& lhs,

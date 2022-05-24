@@ -186,7 +186,7 @@ TEST(MetricTensor, hex27)
 }
 
 
-#ifndef KOKKOS_ENABLE_CUDA
+#if !(defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP))
 TEST(MetricTensorNGP, hex27)
 {
   stk::topology topo =  stk::topology::HEX_27;

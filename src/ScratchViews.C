@@ -413,6 +413,7 @@ void fill_pre_req_data(
 }
 
 template
+KOKKOS_FUNCTION
 void fill_pre_req_data(
   const ElemDataRequestsGPU& dataNeeded,
   const stk::mesh::NgpMesh& ngpMesh,
@@ -421,6 +422,7 @@ void fill_pre_req_data(
   ScratchViews<double, DeviceTeamHandleType,DeviceShmem>& prereqData);
 
 template
+KOKKOS_FUNCTION
 void fill_pre_req_data(
   const ElemDataRequestsGPU& dataNeeded,
   const stk::mesh::NgpMesh& ngpMesh,

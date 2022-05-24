@@ -58,6 +58,7 @@ EnthalpyTGradBCElemKernel<BcAlgTraits>::EnthalpyTGradBCElemKernel(
 }
 
 template<typename BcAlgTraits>
+KOKKOS_FUNCTION
 void
 EnthalpyTGradBCElemKernel<BcAlgTraits>::execute(
   SharedMemView<DoubleType**, DeviceShmem>&,

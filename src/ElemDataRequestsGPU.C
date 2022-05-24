@@ -69,7 +69,7 @@ ElemDataRequestsGPU::fill_host_data_enums(
 void ElemDataRequestsGPU::fill_host_fields(
   const ElemDataRequests& dataReq, const nalu_ngp::FieldManager& fieldMgr)
 {
-#ifdef KOKKOS_ENABLE_CUDA
+#if defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP)
   fields = FieldInfoView(Kokkos::ViewAllocateWithoutInitializing("Fields"), dataReq.get_fields().size());
 #else
   fields = FieldInfoView("Fields", dataReq.get_fields().size());
@@ -86,7 +86,7 @@ void ElemDataRequestsGPU::fill_host_fields(
 void ElemDataRequestsGPU::fill_host_coords_fields(
   const ElemDataRequests& dataReq, const nalu_ngp::FieldManager& fieldMgr)
 {
-#ifdef KOKKOS_ENABLE_CUDA
+#if defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP)
   coordsFields_ = FieldView(Kokkos::ViewAllocateWithoutInitializing("CoordsFields"), dataReq.get_coordinates_map().size());
 #else
   coordsFields_ = FieldView("CoordsFields", dataReq.get_coordinates_map().size());

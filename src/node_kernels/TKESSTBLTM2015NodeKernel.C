@@ -67,6 +67,7 @@ TKESSTBLTM2015NodeKernel::setup(Realm& realm)
   iterSwitchTransition_ = realm.solutionOptions_->iterSwitchTransition_;
 }
 
+KOKKOS_FUNCTION
 void
 TKESSTBLTM2015NodeKernel::execute(
   NodeKernelTraits::LhsType& lhs,

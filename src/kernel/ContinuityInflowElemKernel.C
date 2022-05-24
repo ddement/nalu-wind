@@ -74,6 +74,7 @@ ContinuityInflowElemKernel<BcAlgTraits>::setup(const TimeIntegrator &timeIntegra
 }
 
 template<typename BcAlgTraits>
+KOKKOS_FUNCTION
 void
 ContinuityInflowElemKernel<BcAlgTraits>::execute(
   SharedMemView<DoubleType **, DeviceShmem>&,

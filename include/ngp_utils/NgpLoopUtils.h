@@ -67,7 +67,7 @@ ngp_calc_thread_shmem_size(
     dataReq.get_total_num_fields(),
     count_needed_field_views(dataReq.get_host_fields()));
 
-#ifndef KOKKOS_ENABLE_CUDA
+#if !(defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP))
   // On host account for extra data to store the SIMD and non-SIMD versions of
   // the ScratchViews
   return (preReqSize + mdvSize) * 2 * simdLen;
@@ -386,7 +386,7 @@ void run_elem_algorithm(
                             *elemData.scrView[is]);
         }
 
-#ifndef KOKKOS_ENABLE_CUDA
+#if !(defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP))
         copy_and_interleave(elemData.scrView, nSimdElems, elemData.simdScrView);
 #endif
 
@@ -483,7 +483,7 @@ void run_elem_par_reduce(
                               *elemData.scrView[is]);
           }
 
-#ifndef KOKKOS_ENABLE_CUDA
+#if !(defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP))
           copy_and_interleave(elemData.scrView, nSimdElems, elemData.simdScrView);
 #endif
 
@@ -601,7 +601,7 @@ void run_face_elem_algorithm(
             faceElemData.numSimdElems = simdFaceIdx;
             nFacesProcessed += simdFaceIdx;
 
-#ifndef KOKKOS_ENABLE_CUDA
+#if !(defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP))
             copy_and_interleave(
               faceElemData.scrFaceView, faceElemData.numSimdElems,
               faceElemData.simdFaceView);
@@ -727,7 +727,7 @@ void run_face_elem_par_reduce(
             faceElemData.numSimdElems = simdFaceIdx;
             nFacesProcessed += simdFaceIdx;
 
-#ifndef KOKKOS_ENABLE_CUDA
+#if !(defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP))
             copy_and_interleave(
               faceElemData.scrFaceView, faceElemData.numSimdElems,
               faceElemData.simdFaceView);

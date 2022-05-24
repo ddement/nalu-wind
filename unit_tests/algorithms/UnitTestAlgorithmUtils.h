@@ -18,7 +18,7 @@
 #include "SupplementalAlgorithm.h"
 #include "UnitTestKokkosUtils.h"
 
-#ifndef KOKKOS_ENABLE_CUDA
+#if !(defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP))
 
 namespace unit_test_algorithm_utils {
 

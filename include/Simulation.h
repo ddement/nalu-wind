@@ -60,7 +60,7 @@ public:
   static bool debug_;
   int serializedIOGroupSize_;
 private:
-#ifdef KOKKOS_ENABLE_CUDA
+#if defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP)
   size_t    default_stack_size;
   const size_t nalu_stack_size=16384;
 #endif
