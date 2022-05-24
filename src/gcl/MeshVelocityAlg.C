@@ -71,7 +71,12 @@ MeshVelocityAlg<AlgTraits>::MeshVelocityAlg(Realm& realm, stk::mesh::Part* part)
   elemData_.add_gathered_nodal_field(meshDispN_, AlgTraits::nDim_);
 
   elemData_.add_master_element_call(SCS_AREAV, CURRENT_COORDINATES);
-  meSCS_->general_shape_fcn(NUM_IP, isoParCoords_, isoCoordsShapeFcn_);
+  meSCS_->general_shape_fcn(NUM_IP, isoParCoords_, isoCoordsShapeFcnHostView_.data());
+  Kokkos::deep_copy(isoCoordsShapeFcnDeviceView_, isoCoordsShapeFcnHostView_);
+
+  Kokkos::View<const int**, Kokkos::HostSpace, Kokkos::MemoryTraits<Kokkos::Unmanaged>> scsFaceNodeMapHostView(&scsFaceNodeMap_[0][0], 12, 4);
+  Kokkos::deep_copy(scsFaceNodeMapDeviceView_, scsFaceNodeMapHostView);
+  
 } // namespace nalu
 
 template <typename AlgTraits>
@@ -104,6 +109,14 @@ MeshVelocityAlg<AlgTraits>::execute()
 
   const std::string algName =
     "compute_mesh_vel_" + std::to_string(AlgTraits::topo_);
+  const auto nodesPerElement = AlgTraits::nodesPerElement_;
+  const auto nDim = AlgTraits::nDim_;
+  constexpr int Hex8numScsIp = AlgTraitsHex8::numScsIp_;
+  const int nip = std::min(Hex8numScsIp,AlgTraits::numScsIp_);
+
+  auto isoCoordsShapeFcn = isoCoordsShapeFcnDeviceView_;
+  auto scsFaceNodeMap = scsFaceNodeMapDeviceView_;
+
   nalu_ngp::run_elem_algorithm(
     algName, meshInfo, stk::topology::ELEM_RANK, elemData_, sel,
     KOKKOS_LAMBDA(ElemSimdDataType & edata) {
@@ -114,20 +127,20 @@ MeshVelocityAlg<AlgTraits>::execute()
       const auto& dispN = scrView.get_scratch_view_2D(meshDispNID);
       const auto& sweptVolN = scrView.get_scratch_view_1D(sweptVolNID);
 
-      DoubleType dx[NUM_IP][AlgTraits::nDim_];
-      DoubleType scs_coords_n[NUM_IP][AlgTraits::nDim_];
-      DoubleType scs_coords_np1[NUM_IP][AlgTraits::nDim_];
+      DoubleType dx[NUM_IP][nDim];
+      DoubleType scs_coords_n[NUM_IP][nDim];
+      DoubleType scs_coords_np1[NUM_IP][nDim];
 
       for (int i = 0; i < NUM_IP; i++) {
-        for (int j = 0; j < AlgTraits::nDim_; j++) {
+        for (int j = 0; j < nDim; j++) {
           dx[i][j] = 0.0;
           scs_coords_n[i][j] = 0.0;
           scs_coords_np1[i][j] = 0.0;
         }
-        for (int k = 0; k < AlgTraits::nodesPerElement_; k++) {
+        for (int k = 0; k < nodesPerElement; k++) {
           const DoubleType r =
-            isoCoordsShapeFcn_[i * AlgTraits::nodesPerElement_ + k];
-          for (int j = 0; j < AlgTraits::nDim_; j++) {
+            isoCoordsShapeFcn(i * nodesPerElement + k);
+          for (int j = 0; j < nDim; j++) {
             dx[i][j] += r * (dispNp1(k, j) - dispN(k, j));
             scs_coords_n[i][j] += r * (mCoords(k, j) + dispN(k, j));
             scs_coords_np1[i][j] += r * (mCoords(k, j) + dispNp1(k, j));
@@ -135,22 +148,19 @@ MeshVelocityAlg<AlgTraits>::execute()
         }
       }
 
-      constexpr int Hex8numScsIp = AlgTraitsHex8::numScsIp_;
-      const int nip = std::min(Hex8numScsIp, AlgTraits::numScsIp_);
-
       for (int ip = 0; ip < nip; ++ip) {
 
         DoubleType scs_vol_coords[8][3];
 
         for (int j = 0; j < AlgTraits::nDim_; j++) {
-          scs_vol_coords[0][j] = scs_coords_n[scsFaceNodeMap_[ip][0]][j];
-          scs_vol_coords[1][j] = scs_coords_n[scsFaceNodeMap_[ip][1]][j];
-          scs_vol_coords[2][j] = scs_coords_n[scsFaceNodeMap_[ip][2]][j];
-          scs_vol_coords[3][j] = scs_coords_n[scsFaceNodeMap_[ip][3]][j];
-          scs_vol_coords[4][j] = scs_coords_np1[scsFaceNodeMap_[ip][0]][j];
-          scs_vol_coords[5][j] = scs_coords_np1[scsFaceNodeMap_[ip][1]][j];
-          scs_vol_coords[6][j] = scs_coords_np1[scsFaceNodeMap_[ip][2]][j];
-          scs_vol_coords[7][j] = scs_coords_np1[scsFaceNodeMap_[ip][3]][j];
+          scs_vol_coords[0][j] = scs_coords_n[scsFaceNodeMap(ip, 0)][j];
+          scs_vol_coords[1][j] = scs_coords_n[scsFaceNodeMap(ip, 1)][j];
+          scs_vol_coords[2][j] = scs_coords_n[scsFaceNodeMap(ip, 2)][j];
+          scs_vol_coords[3][j] = scs_coords_n[scsFaceNodeMap(ip, 3)][j];
+          scs_vol_coords[4][j] = scs_coords_np1[scsFaceNodeMap(ip, 0)][j];
+          scs_vol_coords[5][j] = scs_coords_np1[scsFaceNodeMap(ip, 1)][j];
+          scs_vol_coords[6][j] = scs_coords_np1[scsFaceNodeMap(ip, 2)][j];
+          scs_vol_coords[7][j] = scs_coords_np1[scsFaceNodeMap(ip, 3)][j];
         }
         DoubleType tmp = hex_volume_grandy(scs_vol_coords);
 

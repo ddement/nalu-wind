@@ -8,7 +8,7 @@
 #include <TpetraLinearSystem.h>
 #include <TpetraLinearSystemHelpers.h>
 
-#ifndef KOKKOS_ENABLE_CUDA
+#if !(defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP))
 
 class DofStatusHex8Mesh : public Hex8Mesh
 {

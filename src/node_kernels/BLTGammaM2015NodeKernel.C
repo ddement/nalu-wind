@@ -56,6 +56,7 @@ BLTGammaM2015NodeKernel::setup(Realm& realm)
   maxStepCount = realm.get_max_time_step_count();
 }
 
+KOKKOS_FUNCTION
 double
 BLTGammaM2015NodeKernel::FPG(const double& lamda0L)
 {
@@ -82,6 +83,31 @@ BLTGammaM2015NodeKernel::FPG(const double& lamda0L)
   return out;
 }
 
+double
+BLTGammaM2015NodeKernel::BLTmax(const double& g1, const double& g2)
+{
+  using DblType = NodeKernelTraits::DblType;
+
+  DblType out;
+  const DblType pswitch = 1.0e-15;
+  const DblType p = 300.0;
+  DblType absp, a, b;
+
+  absp = stk::math::abs(p);
+
+  a = stk::math::abs(g1 - g2);
+  b = -stk::math::log(absp * pswitch) / absp;
+
+  if (a > b) {
+    out = stk::math::max(g1, g2);
+  } else {
+    out = stk::math::log(stk::math::exp(p * g1) + stk::math::exp(p * g2)) / p;
+  }
+
+  return out;
+}
+
+KOKKOS_FUNCTION
 void
 BLTGammaM2015NodeKernel::execute(
   NodeKernelTraits::LhsType& lhs,

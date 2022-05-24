@@ -74,6 +74,7 @@ MomentumOpenEdgeKernel<BcAlgTraits>::MomentumOpenEdgeKernel(
 //-------- execute ---------------------------------------------------------
 //--------------------------------------------------------------------------
 template <typename BcAlgTraits>
+KOKKOS_FUNCTION
 void
 MomentumOpenEdgeKernel<BcAlgTraits>::execute(
   SharedMemView<DoubleType**, DeviceShmem>& lhs,

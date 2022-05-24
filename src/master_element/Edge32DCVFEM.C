@@ -31,13 +31,14 @@ namespace nalu {
 //--------------------------------------------------------------------------
 //-------- constructor -----------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 Edge32DSCS::Edge32DSCS() : MasterElement()
 {
   MasterElement::nDim_ = nDim_;
   MasterElement::nodesPerElement_ = nodesPerElement_;
   MasterElement::numIntPoints_ = numIntPoints_;
 
-#ifndef KOKKOS_ENABLE_CUDA
+#if !(defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP))
   const int stk1DNodeMap[3] = {0, 2, 1};
 
   int scalar_index = 0;
@@ -80,6 +81,7 @@ Edge32DSCS::tensor_product_weight(const int s1Node, const int s1Ip) const
 //--------------------------------------------------------------------------
 //-------- ipNodeMap -------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 const int*
 Edge32DSCS::ipNodeMap(int /*ordinal*/) const
 {
@@ -90,12 +92,12 @@ Edge32DSCS::ipNodeMap(int /*ordinal*/) const
 //--------------------------------------------------------------------------
 //-------- determinant -----------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void
 Edge32DSCS::determinant(
   SharedMemView<DoubleType**, DeviceShmem>& coords,
   SharedMemView<DoubleType**, DeviceShmem>& area)
 {
-
   NALU_ALIGNED DoubleType areaVector[2];
   const DoubleType x0 = coords(0, 0);
   const DoubleType y0 = coords(0, 1);
@@ -146,6 +148,7 @@ Edge32DSCS::determinant(
 //--------------------------------------------------------------------------
 //-------- shape_fcn -------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void
 Edge32DSCS::shape_fcn(SharedMemView<DoubleType**, DeviceShmem>& shpfc)
 {
@@ -172,6 +175,7 @@ Edge32DSCS::shape_fcn(double* shpfc)
 //--------------------------------------------------------------------------
 //-------- shifted_shape_fcn -----------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void
 Edge32DSCS::shifted_shape_fcn(SharedMemView<DoubleType**, DeviceShmem>& shpfc)
 {

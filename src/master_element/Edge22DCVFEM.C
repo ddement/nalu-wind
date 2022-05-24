@@ -46,6 +46,7 @@ Edge2DSCS::Edge2DSCS()
 //--------------------------------------------------------------------------
 //-------- ipNodeMap -------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 const int*
 Edge2DSCS::ipNodeMap(int /*ordinal*/) const
 {
@@ -56,10 +57,10 @@ Edge2DSCS::ipNodeMap(int /*ordinal*/) const
 //--------------------------------------------------------------------------
 //-------- determinant -----------------------------------------------------
 //--------------------------------------------------------------------------
-void
-Edge2DSCS::determinant(
-  SharedMemView<DoubleType**, DeviceShmem>& coords,
-  SharedMemView<DoubleType**, DeviceShmem>& area)
+KOKKOS_FUNCTION
+void Edge2DSCS::determinant(
+    SharedMemView<DoubleType**, DeviceShmem> &coords,
+    SharedMemView<DoubleType**, DeviceShmem> &area) 
 {
   constexpr int npe = nodesPerElement_;
   constexpr int dim = nDim_;
@@ -107,6 +108,7 @@ Edge2DSCS::determinant(
 //--------------------------------------------------------------------------
 //-------- shape_fcn -------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void
 Edge2DSCS::shape_fcn(SharedMemView<DoubleType**, DeviceShmem>& shpfc)
 {
@@ -129,6 +131,7 @@ Edge2DSCS::shape_fcn(double* shpfc)
 //--------------------------------------------------------------------------
 //-------- shifted_shape_fcn -----------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void
 Edge2DSCS::shifted_shape_fcn(SharedMemView<DoubleType**, DeviceShmem>& shpfc)
 {

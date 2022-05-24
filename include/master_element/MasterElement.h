@@ -323,7 +323,7 @@ public:
 
   KOKKOS_FUNCTION virtual const int* adjacentNodes() const
   {
-#ifndef KOKKOS_ENABLE_CUDA
+#if !(defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP))
     throw std::runtime_error("adjacentNodes not implimented");
 #else
     return nullptr;

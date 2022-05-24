@@ -90,6 +90,7 @@ MomentumSSTAMSForcingNodeKernel::setup(Realm& realm)
   northVector_ = realm.solutionOptions_->northVector_;
 }
 
+KOKKOS_FUNCTION
 void
 MomentumSSTAMSForcingNodeKernel::execute(
   NodeKernelTraits::LhsType&,

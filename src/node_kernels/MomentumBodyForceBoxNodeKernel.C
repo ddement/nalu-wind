@@ -130,13 +130,14 @@ MomentumBodyForceBoxNodeKernel::setup(Realm& realm)
                                       stk::mesh::Selector(*mdotPart_);
 
       double ma = 0.0;
+      const auto nDim = nDim_;
       nalu_ngp::run_entity_par_reduce(
         algName, ngpMesh, realm.meta_data().side_rank(), sel,
         KOKKOS_LAMBDA(const MeshIndex& mi, double& sum) {
           for (int ip = 0; ip < numScsIp; ++ip) {
-            const int offSetAveraVec = ip * nDim_;
+            const int offSetAveraVec = ip * nDim;
             double aMag = 0.0;
-            for (int j = 0; j < nDim_; ++j) {
+            for (int j = 0; j < nDim; ++j) {
               aMag += areaVec.get(mi, offSetAveraVec + j) *
                       areaVec.get(mi, offSetAveraVec + j);
             }
@@ -204,6 +205,7 @@ MomentumBodyForceBoxNodeKernel::setup(Realm& realm)
   }
 }
 
+KOKKOS_FUNCTION
 void
 MomentumBodyForceBoxNodeKernel::execute(
   NodeKernelTraits::LhsType&,

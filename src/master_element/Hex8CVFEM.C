@@ -26,6 +26,7 @@ namespace nalu {
 //--------------------------------------------------------------------------
 //-------- constructor -----------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 HexSCV::HexSCV() : MasterElement()
 {
   MasterElement::nDim_ = nDim_;
@@ -36,6 +37,7 @@ HexSCV::HexSCV() : MasterElement()
 //--------------------------------------------------------------------------
 //-------- ipNodeMap -------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 const int*
 HexSCV::ipNodeMap(int /*ordinal*/) const
 {
@@ -58,12 +60,14 @@ HexSCV::determinant(
   (&nelem, &npe, &nint, coords, volume, error, &lerr);
 }
 
+KOKKOS_FUNCTION
 void
 HexSCV::shape_fcn(SharedMemView<DoubleType**, DeviceShmem>& shpfc)
 {
   hex8_shape_fcn(numIntPoints_, &intgLoc_[0], shpfc);
 }
 
+KOKKOS_FUNCTION
 void
 HexSCV::shifted_shape_fcn(SharedMemView<DoubleType**, DeviceShmem>& shpfc)
 {
@@ -73,6 +77,7 @@ HexSCV::shifted_shape_fcn(SharedMemView<DoubleType**, DeviceShmem>& shpfc)
 //--------------------------------------------------------------------------
 //-------- determinant -----------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void
 HexSCV::determinant(
   SharedMemView<DoubleType**, DeviceShmem>& coords,
@@ -103,6 +108,7 @@ HexSCV::determinant(
 //--------------------------------------------------------------------------
 //-------- grad_op ---------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void
 HexSCV::grad_op(
   SharedMemView<DoubleType**, DeviceShmem>& coords,
@@ -143,6 +149,7 @@ HexSCV::grad_op(
 //--------------------------------------------------------------------------
 //-------- shifted_grad_op -------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void
 HexSCV::shifted_grad_op(
   SharedMemView<DoubleType**, DeviceShmem>& coords,
@@ -184,6 +191,7 @@ HexSCV::Mij(const double* coords, double* metric, double* deriv)
   generic_Mij_3d<AlgTraitsHex8>(numIntPoints_, deriv, coords, metric);
 }
 //-------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void
 HexSCV::Mij(
   SharedMemView<DoubleType**, DeviceShmem>& coords,
@@ -197,6 +205,7 @@ HexSCV::Mij(
 //--------------------------------------------------------------------------
 //-------- constructor -----------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 HexSCS::HexSCS() : MasterElement(HexSCS::scaleToStandardIsoFac_)
 {
   MasterElement::nDim_ = nDim_;
@@ -207,6 +216,7 @@ HexSCS::HexSCS() : MasterElement(HexSCS::scaleToStandardIsoFac_)
 //--------------------------------------------------------------------------
 //-------- ipNodeMap -------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 const int*
 HexSCS::ipNodeMap(int ordinal) const
 {
@@ -217,6 +227,7 @@ HexSCS::ipNodeMap(int ordinal) const
 //--------------------------------------------------------------------------
 //-------- shape_fcn -------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void
 HexSCS::shape_fcn(SharedMemView<DoubleType**, DeviceShmem>& shpfc)
 {
@@ -226,6 +237,7 @@ HexSCS::shape_fcn(SharedMemView<DoubleType**, DeviceShmem>& shpfc)
 //--------------------------------------------------------------------------
 //-------- shifted_shape_fcn -----------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void
 HexSCS::shifted_shape_fcn(SharedMemView<DoubleType**, DeviceShmem>& shpfc)
 {
@@ -235,6 +247,7 @@ HexSCS::shifted_shape_fcn(SharedMemView<DoubleType**, DeviceShmem>& shpfc)
 //--------------------------------------------------------------------------
 //-------- grad_op ---------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void
 HexSCS::grad_op(
   SharedMemView<DoubleType**, DeviceShmem>& coords,
@@ -248,6 +261,7 @@ HexSCS::grad_op(
 //--------------------------------------------------------------------------
 //-------- shifted_grad_op -------------------------------------------------
 //--------------------------------------c------------------------------------
+KOKKOS_FUNCTION
 void
 HexSCS::shifted_grad_op(
   SharedMemView<DoubleType**, DeviceShmem>& coords,
@@ -261,6 +275,7 @@ HexSCS::shifted_grad_op(
 //--------------------------------------------------------------------------
 //-------- determinant -----------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void
 HexSCS::determinant(
   SharedMemView<DoubleType**, DeviceShmem>& coords,
@@ -291,6 +306,7 @@ HexSCS::determinant(
 //--------------------------------------------------------------------------
 //-------- side_node_ordinals ----------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 const int*
 HexSCS::side_node_ordinals(int ordinal) const
 {
@@ -372,7 +388,7 @@ HexSCS::shifted_grad_op(
 //-------- face_grad_op ----------------------------------------------------
 //--------------------------------------------------------------------------
 template <bool shifted>
-void
+KOKKOS_FUNCTION void
 HexSCS::face_grad_op_t(
   const int face_ordinal,
   SharedMemView<DoubleType**, DeviceShmem>& coords,
@@ -387,6 +403,7 @@ HexSCS::face_grad_op_t(
   generic_grad_op<AlgTraitsHex8>(deriv, coords, gradop);
 }
 
+KOKKOS_FUNCTION
 void
 HexSCS::face_grad_op(
   int face_ordinal,
@@ -434,6 +451,7 @@ HexSCS::face_grad_op(
 //--------------------------------------------------------------------------
 //-------- shifted_face_grad_op --------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void
 HexSCS::shifted_face_grad_op(
   int face_ordinal,
@@ -494,6 +512,7 @@ HexSCS::gij(
 //--------------------------------------------------------------------------
 //-------- gij -------------------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void
 HexSCS::gij(
   SharedMemView<DoubleType**, DeviceShmem>& coords,
@@ -514,6 +533,7 @@ HexSCS::Mij(const double* coords, double* metric, double* deriv)
   generic_Mij_3d<AlgTraitsHex8>(numIntPoints_, deriv, coords, metric);
 }
 //-------------------------------------------------------------------------
+KOKKOS_FUNCTION
 void
 HexSCS::Mij(
   SharedMemView<DoubleType**, DeviceShmem>& coords,
@@ -527,6 +547,7 @@ HexSCS::Mij(
 //--------------------------------------------------------------------------
 //-------- adjacentNodes ---------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 const int*
 HexSCS::adjacentNodes()
 {
@@ -537,6 +558,7 @@ HexSCS::adjacentNodes()
 //--------------------------------------------------------------------------
 //-------- scsIpEdgeOrd ----------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 const int*
 HexSCS::scsIpEdgeOrd()
 {
@@ -568,6 +590,7 @@ HexSCS::shifted_shape_fcn(double* shpfc)
 //--------------------------------------------------------------------------
 //-------- opposingNodes --------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 int
 HexSCS::opposingNodes(const int ordinal, const int node)
 {
@@ -577,6 +600,7 @@ HexSCS::opposingNodes(const int ordinal, const int node)
 //--------------------------------------------------------------------------
 //-------- opposingFace --------------------------------------------------
 //--------------------------------------------------------------------------
+KOKKOS_FUNCTION
 int
 HexSCS::opposingFace(const int ordinal, const int node)
 {

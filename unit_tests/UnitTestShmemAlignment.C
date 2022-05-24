@@ -2,6 +2,7 @@
 
 #include <KokkosInterface.h>
 
+KOKKOS_FUNCTION
 static inline bool
 is_aligned(const void* pointer, size_t byte_count)
 {
@@ -55,7 +56,7 @@ do_the_test()
 
   Kokkos::deep_copy(hostResults, ngpResults);
 
-#ifdef KOKKOS_ENABLE_CUDA
+#if defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP)
   // We're expecting the result to be 3.
   // On GPU the result is 96... Is it 96 because there are 32 threads
   // per warp and you never have less than 1 warp ???

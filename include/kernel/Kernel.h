@@ -167,7 +167,7 @@ public:
   {
   }
 
-#ifdef KOKKOS_ENABLE_CUDA
+#if defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP)
   KOKKOS_FUNCTION
   virtual void execute(
     SharedMemView<DoubleType**, DeviceShmem>&,

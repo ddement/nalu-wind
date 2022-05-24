@@ -28,6 +28,9 @@ int main(int argc, char **argv)
 #ifdef KOKKOS_ENABLE_CUDA
     const size_t nalu_stack_size=16384;
     cudaDeviceSetLimit (cudaLimitStackSize, nalu_stack_size);
+#elif defined(KOKKOS_ENABLE_HIP)
+//    const size_t nalu_stack_size=16384;
+//    hipDeviceSetLimit (hipLimitStackSize, nalu_stack_size);
 #endif
     // Create a dummy nested scope to ensure destructors are called before
     // Kokkos::finalize_all. The instances owning threaded Kokkos loops must be
