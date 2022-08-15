@@ -148,6 +148,9 @@ MeshVelocityAlg<AlgTraits>::execute()
         }
       }
 
+      constexpr int Hex8numScsIp = AlgTraitsHex8::numScsIp_;
+      const int nip = std::min(Hex8numScsIp, AlgTraits::numScsIp_);
+
       for (int ip = 0; ip < nip; ++ip) {
 
         DoubleType scs_vol_coords[8][3];

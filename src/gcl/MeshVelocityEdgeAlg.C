@@ -96,10 +96,6 @@ MeshVelocityEdgeAlg<AlgTraits>::execute()
                                   !(realm_.get_inactive_selector());
 
   auto meSCS = meSCS_;
-//  const int* lrscv = meSCS_->adjacentNodes();
-//  const int* scsIpEdgeMap = meSCS_->scsIpEdgeOrd();
-//  const auto scsFaceNodeMap = scsFaceNodeMap_;
-//  const auto isoCoordsShapeFcn = isoCoordsShapeFcn_;
   const auto nodesPerElement = AlgTraits::nodesPerElement_;
   const auto nDim = AlgTraits::nDim_;
   const auto numScsIp = AlgTraits::numScsIp_;
@@ -112,6 +108,8 @@ MeshVelocityEdgeAlg<AlgTraits>::execute()
   nalu_ngp::run_elem_algorithm(
     algName, meshInfo, stk::topology::ELEM_RANK, elemData_, sel,
     KOKKOS_LAMBDA(ElemSimdDataType & edata) {
+      const int* lrscv = meSCS_->adjacentNodes();
+      const int* scsIpEdgeMap = meSCS_->scsIpEdgeOrd();
 
       auto& scrView = edata.simdScrView;
 

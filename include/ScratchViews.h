@@ -1061,8 +1061,7 @@ ScratchViews<T, TEAMHANDLETYPE, SHMEM>::create_needed_master_element_views(
 }
 
 template <typename T, typename TEAMHANDLETYPE, typename SHMEM>
-KOKKOS_FUNCTION
-void
+KOKKOS_FUNCTION void
 ScratchViews<T, TEAMHANDLETYPE, SHMEM>::fill_static_meviews(
   const ElemDataRequestsGPU& dataNeeded)
 {

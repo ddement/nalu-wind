@@ -72,8 +72,6 @@ private:
     {11, 12, 18, 17}, {12, 10, 16, 18}, {14, 15, 18, 16}, {13, 17, 18, 15}};
 
   Kokkos::View<int[12][4]> scsFaceNodeMapDeviceView_;
-
-  //double isoCoordsShapeFcn_[152];
   Kokkos::View<double[152]> isoCoordsShapeFcnDeviceView_;
   typename Kokkos::View<double[152]>::HostMirror isoCoordsShapeFcnHostView_;
 };
