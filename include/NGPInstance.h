@@ -17,6 +17,8 @@
 namespace sierra {
 namespace nalu {
 
+//class MomentumSSTAMSForcingNodeKernel;
+
 namespace nalu_ngp {
 
 template <class T>
@@ -51,6 +53,8 @@ create(Args&&... args)
 {
   const std::string debuggingName(typeid(T).name());
   T* obj = kokkos_malloc_on_device<T>(debuggingName);
+
+//static_assert(!std::is_same<T, MomentumSSTAMSForcingNodeKernel>::value, "Same");
 
   // CUDA lambda cannot capture packed parameter
   const T hostObj(std::forward<Args>(args)...);

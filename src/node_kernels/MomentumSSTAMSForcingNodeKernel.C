@@ -86,8 +86,20 @@ MomentumSSTAMSForcingNodeKernel::setup(Realm& realm)
   forcingComp_ = fieldMgr.get_field<double>(forcingCompID_);
   RANSBelowKs_ = realm.solutionOptions_->RANSBelowKs_;
   z0_ = realm.solutionOptions_->roughnessHeight_;
-  eastVector_ = realm.solutionOptions_->eastVector_;
-  northVector_ = realm.solutionOptions_->northVector_;
+//  eastVector_ = realm.solutionOptions_->eastVector_;
+//  northVector_ = realm.solutionOptions_->northVector_;
+
+//  auto eastVectorSize = realm.solutionOptions_->eastVector_.size();
+//  auto northVectorSize = realm.solutionOptions_->northVector_.size();
+//
+//  eastVector_ = Kokkos::View<double*, MemSpace>("eastVectorView", eastVectorSize);
+//  northVector_ = Kokkos::View<double*, MemSpace>("northVectorView", northVectorSize);
+
+//  Kokkos::UnmanagedView<double*, HostSpace> unmanagedEastVector = Kokkos::UnmanagedView<double*, HostSpace>(realm.solutionOptions_->eastVector_.data(), eastVectorSize);
+//  Kokkos::UnmanagedView<double*, HostSpace> unmanagedNorthVector = Kokkos::UnmanagedView<double*, HostSpace>(realm.solutionOptions_->northVector_.data(), northVectorSize);
+//
+//  Kokkos::deep_copy(eastVector_, unmanagedEastVector);
+//  Kokkos::deep_copy(northVector_, unmanagedNorthVector);
 }
 
 KOKKOS_FUNCTION
