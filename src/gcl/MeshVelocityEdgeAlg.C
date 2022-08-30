@@ -117,9 +117,6 @@ MeshVelocityEdgeAlg<AlgTraits>::execute()
       const auto& dispNp1 = scrView.get_scratch_view_2D(meshDispNp1ID);
       const auto& dispN = scrView.get_scratch_view_2D(meshDispNID);
   
-      const int* lrscv = meSCS->adjacentNodes();
-      const int* scsIpEdgeMap = meSCS->scsIpEdgeOrd();
-
       DoubleType scs_coords_n[19][nDim];
       DoubleType scs_coords_np1[19][nDim];
 

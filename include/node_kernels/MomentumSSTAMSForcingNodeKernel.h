@@ -93,11 +93,9 @@ private:
 
   bool RANSBelowKs_;
   double z0_;
-  //std::vector<double> eastVector_;
-  //std::vector<double> northVector_;
 
-//  Kokkos::View<double*, MemSpace> eastVector_;
-//  Kokkos::View<double*, MemSpace> northVector_;
+  Kokkos::View<double*> eastVector_;
+  Kokkos::View<double*> northVector_;
 };
 
 } // namespace nalu
