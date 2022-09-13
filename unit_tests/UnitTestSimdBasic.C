@@ -44,28 +44,28 @@ initialize(int N, aligned_vector& x, aligned_vector& y)
   }
 }
 
-TEST(Simd, stkMath)
-{
-  const int N = 512; // this is a multiple of the simd width
-                     // if this is not true, the remainder
-                     // must be handled appropriately
-  aligned_vector x(N);
-  aligned_vector y(N);
-  aligned_vector solution(N);
-
-  initialize(N, x, y);
-
-  for (int n = 0; n < N; n += stk::simd::ndoubles) {
-    const stk::simd::Double xl = stk::simd::load(&x[n]);
-    const stk::simd::Double yl = stk::simd::load(&y[n]);
-    stk::simd::Double zl = stk::math::abs(xl) * stk::math::exp(yl);
-    stk::simd::store(&solution[n], zl);
-  }
-
-  for (int n = 0; n < N; ++n) {
-    EXPECT_NEAR(std::abs(x[n]) * std::exp(y[n]), solution[n], 1.e-6);
-  }
-}
+//TEST(Simd, stkMath)
+//{
+//  const int N = 512; // this is a multiple of the simd width
+//                     // if this is not true, the remainder
+//                     // must be handled appropriately
+//  aligned_vector x(N);
+//  aligned_vector y(N);
+//  aligned_vector solution(N);
+//
+//  initialize(N, x, y);
+//
+//  for (int n = 0; n < N; n += stk::simd::ndoubles) {
+//    const stk::simd::Double xl = stk::simd::load(&x[n]);
+//    const stk::simd::Double yl = stk::simd::load(&y[n]);
+//    stk::simd::Double zl = stk::math::abs(xl) * stk::math::exp(yl);
+//    stk::simd::store(&solution[n], zl);
+//  }
+//
+//  for (int n = 0; n < N; ++n) {
+//    EXPECT_NEAR(std::abs(x[n]) * std::exp(y[n]), solution[n], 1.e-6);
+//  }
+//}
 
 TEST(Simd, Views)
 {
